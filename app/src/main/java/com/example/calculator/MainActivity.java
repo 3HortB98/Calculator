@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,13 +9,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText etNumberOne;
     EditText etNumberTwo;
     Button btnAdd;
     TextView tvResult;
+    Button btnLogs;
+    Button btnSub;
 
+    private List<String> log = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,12 +32,38 @@ public class MainActivity extends AppCompatActivity {
         etNumberTwo = findViewById(R.id.etNumber2);
         btnAdd = findViewById(R.id.btnAdd);
         tvResult = findViewById(R.id.tvResult);
+        btnLogs = findViewById(R.id.btnLog);
+        btnSub = findViewById(R.id.btnSubtract);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String result = add(etNumberOne.getText().toString(),etNumberTwo.getText().toString());
+                String num1 = etNumberOne.getText().toString();
+                String num2 = etNumberTwo.getText().toString();
+                String result = add(num1,num2);
                 tvResult.setText(result);
+                //log.add("Result of Addition: " + result);
+                log.add("Result of: "+num1 +" + " + num2 +" = " + result);
+            }
+        });
+
+        btnSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String num1 = etNumberOne.getText().toString();
+                String num2 = etNumberTwo.getText().toString();
+                String result = subtract(num1, num2);
+                tvResult.setText(result);
+                log.add("Result of: "+num1 +" - " + num2 +" = " + result);
+            }
+        });
+
+        btnLogs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LogsActivity.class);
+                intent.putStringArrayListExtra("LogsResult", (ArrayList<String>)log);
+                startActivity(intent);
             }
         });
 
@@ -41,10 +75,22 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
-        int a = Integer.parseInt(numberOne);
-        int b = Integer.parseInt(numberTwo);
-        int result = a+b;
+        double a = Double.parseDouble(numberOne);
+        double b = Double.parseDouble(numberTwo);
+        //int b = Integer.parseInt(numberTwo);
+        double result = a+b;
         return String.valueOf(result);
         //return Integer.toString(result); same way as above
+    }
+
+    private String subtract(String numberOne, String numberTwo){
+        if (numberOne.equals("") || numberTwo.isEmpty()) {
+            Toast.makeText(this,"Please enter a valid number", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        double a = Double.parseDouble(numberOne);
+        double b = Double.parseDouble(numberTwo);
+        double result = a-b;
+        return String.valueOf(result);
     }
 }
