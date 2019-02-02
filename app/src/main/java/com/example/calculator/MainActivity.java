@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tvResult;
     Button btnLogs;
     Button btnSub;
+    Button btnDiv;
+    Button btnMult;
 
     private List<String> log = new ArrayList<>();
     @Override
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         tvResult = findViewById(R.id.tvResult);
         btnLogs = findViewById(R.id.btnLog);
         btnSub = findViewById(R.id.btnSubtract);
+        btnDiv = findViewById(R.id.btnDivide);
+        btnMult = findViewById(R.id.btnMultiply);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 String result = add(num1,num2);
                 tvResult.setText(result);
                 //log.add("Result of Addition: " + result);
-                log.add("Result of: "+num1 +" + " + num2 +" = " + result);
+                log.add("Add result of: "+num1 +" + " + num2 +" = " + result);
             }
         });
 
@@ -54,7 +58,29 @@ public class MainActivity extends AppCompatActivity {
                 String num2 = etNumberTwo.getText().toString();
                 String result = subtract(num1, num2);
                 tvResult.setText(result);
-                log.add("Result of: "+num1 +" - " + num2 +" = " + result);
+                log.add("Subtract result of: "+num1 +" - " + num2 +" = " + result);
+            }
+        });
+
+        btnDiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String num1 = etNumberOne.getText().toString();
+                String num2 = etNumberTwo.getText().toString();
+                String result = divide(num1, num2);
+                tvResult.setText(result);
+                log.add("Divide result of: "+num1 +" / " + num2 +" = " + result);
+            }
+        });
+
+        btnMult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String num1 = etNumberOne.getText().toString();
+                String num2 = etNumberTwo.getText().toString();
+                String result = multiply(num1, num2);
+                tvResult.setText(result);
+                log.add("Multiply result of: "+num1 +" * " + num2 +" = " + result);
             }
         });
 
@@ -93,4 +119,28 @@ public class MainActivity extends AppCompatActivity {
         double result = a-b;
         return String.valueOf(result);
     }
+
+    private String divide(String numberOne, String numberTwo){
+        if (numberOne.equals("") || numberTwo.isEmpty()) {
+            Toast.makeText(this,"Please enter a valid number", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        double a = Double.parseDouble(numberOne);
+        double b = Double.parseDouble(numberTwo);
+        double result = a/b;
+        return String.valueOf(result);
+
+    }
+
+    private String multiply(String numberOne, String numberTwo){
+        if (numberOne.equals("") || numberTwo.isEmpty()) {
+            Toast.makeText(this,"Please enter a valid number", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        double a = Double.parseDouble(numberOne);
+        double b = Double.parseDouble(numberTwo);
+        double result = a*b;
+        return String.valueOf(result);
+    }
+
 }
