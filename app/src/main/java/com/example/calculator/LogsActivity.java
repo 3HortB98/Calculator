@@ -24,8 +24,8 @@ public class LogsActivity extends AppCompatActivity {
             stringBuilder.append("\n");
         }
         tvLogs.setText(stringBuilder.toString());
-        Room room = (Room) getIntent().getParcelableExtra("Room");
-        tvLogs.setText(String.valueOf(room.getChairCount()));
+        //Room room = (Room) getIntent().getParcelableExtra("Room");
+        //tvLogs.setText(String.valueOf(room.getChairCount()));
 
     }
 }

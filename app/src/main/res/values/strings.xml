@@ -6,4 +6,6 @@
     <string name="btnSubtract">Subtract</string>
     <string name="btnDivide">Divide</string>
     <string name="btnMultiply">Multiply</string>
+    <string name="btnSave">Save</string>
+    <string name="nameHint">Your Name</string>
 </resources>
