@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LogsActivity.class);
                 intent.putStringArrayListExtra("LogsResult", (ArrayList<String>)log);
+                Room room = new Room("Training Room", 6);
+                intent.putExtra("Room", room);
                 startActivity(intent);
             }
         });
