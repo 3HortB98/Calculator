@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnMult;
     Button btnSave;
     Group nameGrp;
+    Button btnEditName;
 
     private List<String> log = new ArrayList<>();
     @Override
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnMult = findViewById(R.id.btnMultiply);
         btnSave = findViewById(R.id.btnSave);
         nameGrp = findViewById(R.id.groupName);
+        btnEditName = findViewById(R.id.btnEditName);
 
         readNameFromSharedPrefences();
 
@@ -61,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnMult.setOnClickListener(this);
 
         btnLogs.setOnClickListener(this);
+
+        btnEditName.setOnClickListener(this);
 
     }
 
@@ -133,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLog:
                 handleLogClick();
                 break;
+            case R.id.btnEditName:
+                handleEditNameBtn();
+                break;
         }
 
     }
@@ -140,8 +151,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleSetName(){
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPreference",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("name",etName.getText().toString());
+        String name = etName.getText().toString();
+        editor.putString("name",name);
         editor.apply();
+        tvResult.setText("Name set to: " + name);
+        nameGrp.setVisibility(View.GONE);
     }
 
     private void handleAddClick(){
@@ -178,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleLogClick(){
+        if (log.size()>0) {
+            writeLogToFile();
+        }
         Intent intent = new Intent(MainActivity.this, LogsActivity.class);
         intent.putStringArrayListExtra("LogsResult", (ArrayList<String>)log);
         Room room = new Room("Training Room", 6);
@@ -192,6 +209,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             nameGrp.setVisibility(View.GONE);
 
         }
-        tvResult.setText(name);
+        tvResult.setText("Welcome" + name);
+        btnEditName.setVisibility(View.VISIBLE);
     }
+
+    private void handleEditNameBtn(){
+        nameGrp.setVisibility(View.VISIBLE);
+        btnEditName.setVisibility(View.GONE);
+    }
+
+    private void writeLogToFile(){
+        File file = new File(getFilesDir(),"Logs.txt");
+        //FileOutputStream fileOutputStream = null;
+
+        try (FileOutputStream fileOutputStream = openFileOutput("Logs.txt", Context.MODE_PRIVATE)){
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String result : log){
+                stringBuilder.append(result);
+                stringBuilder.append("\n");
+            }
+                fileOutputStream.write(stringBuilder.toString().getBytes());
+
+        } catch (IOException ioException){
+            Toast.makeText(this,"File Not Found", Toast.LENGTH_SHORT).show();
+            ioException.printStackTrace();
+        }
+    }
+
 }
