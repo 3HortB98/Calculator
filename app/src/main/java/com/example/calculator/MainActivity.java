@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void writeLogToFile(){
-        File file = new File(getFilesDir(),"Logs.txt");
+        //File file = new File(getFilesDir(),"Logs.txt");
         //FileOutputStream fileOutputStream = null;
 
         try (FileOutputStream fileOutputStream = openFileOutput("Logs.txt", Context.MODE_PRIVATE)){
@@ -248,14 +248,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     private void writeLogsToExternalStorage(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
             requestStoragePermission();
+        }else{
+            writeFile();
         }
     }
 
     private void requestStoragePermission() {
         isPermissionRequestInProgress = true;
-        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+        ActivityCompat.requestPermissions(this, new String[]
+                {Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
     }
 
     @Override
@@ -270,7 +274,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void writeFile() {
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-            File parentFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Calculator");
+            File parentFolder = new File(Environment
+                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Calculator");
             parentFolder.mkdirs();
 
             File file = new File(parentFolder, "Logs.txt");
